@@ -5,6 +5,17 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!--
+    adding the core java taglib to the file after adding 
+    the JSTL 1.2.1 library to the Libraries folder.
+
+    This is to ensure that all content (messages and errors)
+    are only part of the JSP (the view) and not coming from
+    the servlet.
+
+--> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,6 +29,8 @@
             Last name: <input type="text" name="lastname" value="${lastname}"><br>
             <input type="submit" value="Submit">
         </form>
-            <p>${message}</p>
+            <c:if test="${invalid == true}">
+            <p>Invalid entry. Please enter both your first and last names.</p>
+            </c:if>
     </body>
 </html>
