@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Person;
 
 /**
  *
@@ -26,22 +27,39 @@ public class HelloWorldServlet extends HttpServlet {
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         
-        // set the attributes for the JSP
-        request.setAttribute("firstname", firstname);
-        request.setAttribute("lastname", lastname);
         
         // validation: if the parameters don't exist or are empty, show the first page again
         if (firstname == null || firstname.equals("") || lastname == null || lastname.equals("")) {
+            // grabbing firstname and lastname from the form and
+            // setting the attributes for the JSP
+            request.setAttribute("firstname", firstname);
+            request.setAttribute("lastname", lastname);
+        
             // set an attribute for a message
             request.setAttribute("message", "Invalid entry. Please enter both your first and last names.");
             
-            // forward the request and response objects to the JSP
+            // forward the request and response objects (the attributes) to the JSP
             // display the form again
             getServletContext().getRequestDispatcher("/WEB-INF/helloWorldForm.jsp")
                     .forward(request, response);
             return; // very important!
         }
+        
+        //if everything is good, the constructor starts a new object called person
+        Person person = new Person(firstname, lastname);
+        //sets a new attribute person of the object person
+        request.setAttribute("person", person);
 
+        /*
+        connect sayHello.jsp with the person attribute in the sayHello.jsp
+        by including
+        
+        imports models.Person;
+        
+        ${person.firstname}; and
+        ${person.lastname};
+        
+        */
         // display the second page
         getServletContext().getRequestDispatcher("/WEB-INF/sayHello.jsp")
                 .forward(request, response);
